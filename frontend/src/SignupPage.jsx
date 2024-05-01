@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
-import s1 from './assets/react.svg';
-import './login.css'; 
-import { Link,useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import s1 from "./assets/react.svg";
+import "./login.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const expiryDate = localStorage.getItem("expiryDate");
+  if (expiryDate && new Date(expiryDate) > new Date()) {
+    navigate("/home");
+  }
   const [typedText, setTypedText] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    password: ""
+    password: "",
   });
   const fullText = "Sign up for an account";
 
@@ -23,40 +27,40 @@ const SignupPage = () => {
       } else {
         clearInterval(typingAnimation);
       }
-    }, 100); 
+    }, 100);
     return () => clearInterval(typingAnimation);
   }, [typedText, fullText]);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Send form data to backend using fetch API
-    console.log(formData)
+    console.log(formData);
     fetch("http://localhost:8080/api/v1/register", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-    .then(response => response.json())
-    .then(data => {
-      // Handle response from backend
-      console.log(data);
-      navigate('/');
-      // Optionally, you can redirect the user to a different page after successful signup
-      // window.location.href = "/success"; // Redirect to success page
-    })
-    .catch(error => {
-      // Handle error
-      console.error('Error:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle response from backend
+        console.log(data);
+        navigate("/");
+        // Optionally, you can redirect the user to a different page after successful signup
+        // window.location.href = "/success"; // Redirect to success page
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -64,16 +68,16 @@ const SignupPage = () => {
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="px-6 py-8">
           <div className="flex justify-center">
-            <img
-              className="h-12 w-auto logo rotate"
-              src={s1}
-              alt="Logo"
-            />
+            <img className="h-12 w-auto logo rotate" src={s1} alt="Logo" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{typedText}</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            {typedText}
+          </h2>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="fullName" className="sr-only">Name</label>
+              <label htmlFor="fullName" className="sr-only">
+                Name
+              </label>
               <input
                 id="name"
                 name="fullName"
@@ -87,7 +91,9 @@ const SignupPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="email-address" className="sr-only">Email address</label>
+              <label htmlFor="email-address" className="sr-only">
+                Email address
+              </label>
               <input
                 id="email-address"
                 name="email"
@@ -101,7 +107,9 @@ const SignupPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
@@ -126,8 +134,11 @@ const SignupPage = () => {
 
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm my-6">
-              <Link to="/" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Already have an Account? | Login
+              <Link
+                to="/"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Already have an Account? | Login
               </Link>
             </div>
           </div>
