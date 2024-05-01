@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import s1 from './assets/react.svg';
 import './login.css'; 
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
+  const navigate=useNavigate();
   const [typedText, setTypedText] = useState("");
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: ""
+  });
   const fullText = "Sign up for an account";
 
   useEffect(() => {
@@ -21,6 +27,38 @@ const SignupPage = () => {
     return () => clearInterval(typingAnimation);
   }, [typedText, fullText]);
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Send form data to backend using fetch API
+    console.log(formData)
+    fetch("http://localhost:8080/api/v1/register", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle response from backend
+      console.log(data);
+      navigate('/');
+      // Optionally, you can redirect the user to a different page after successful signup
+      // window.location.href = "/success"; // Redirect to success page
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error:', error);
+    });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg overflow-hidden">
@@ -33,17 +71,19 @@ const SignupPage = () => {
             />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{typedText}</h2>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="sr-only">Name</label>
+              <label htmlFor="fullName" className="sr-only">Name</label>
               <input
                 id="name"
-                name="name"
+                name="fullName"
                 type="text"
-                autoComplete="name"
+                autoComplete="fullName"
                 required
+                value={formData.name}
+                onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
-                placeholder="Name"
+                placeholder="fullName"
               />
             </div>
             <div>
@@ -54,6 +94,8 @@ const SignupPage = () => {
                 type="email"
                 autoComplete="email"
                 required
+                value={formData.email}
+                onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
                 placeholder="Email address"
               />
@@ -66,23 +108,20 @@ const SignupPage = () => {
                 type="password"
                 autoComplete="new-password"
                 required
+                value={formData.password}
+                onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
                 placeholder="Password"
               />
             </div>
             <div>
-  <label htmlFor="phone" className="sr-only">Phone Number</label>
-  <input
-    id="phone"
-    name="phone"
-    type="tel"
-    autoComplete="tel"
-    required
-    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
-    placeholder="Phone Number"
-  />
-</div>
-
+              <button
+                type="submit"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:bg-gradient-to-r hover:from-indigo-700 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
+              >
+                Sign up
+              </button>
+            </div>
           </form>
 
           <div className="flex items-center justify-between mt-4">
@@ -91,20 +130,6 @@ const SignupPage = () => {
               Already have an Account? | Login
               </Link>
             </div>
-            {/* <div className="text-sm my-6">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Forgot your password?
-              </a>
-            </div> */}
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:bg-gradient-to-r hover:from-indigo-700 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
-            >
-              Sign up
-            </button>
           </div>
         </div>
       </div>

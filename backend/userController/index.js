@@ -42,7 +42,7 @@ module.exports = {
             email: user.email
         }
         const jwtToken = jwt.sign(tokenObject, process.env.SECRET, {expiresIn: '4h'});
-
+        // res.cookie('jwt',jwtToken);
         return res.status(200)
             .json({jwtToken, tokenObject});
        }catch(err){

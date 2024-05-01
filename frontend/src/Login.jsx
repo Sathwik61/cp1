@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import s1 from './assets/react.svg';
 import './login.css';
-import { Link } from "react-router-dom";
-import { urls } from "../url.js";
+import { Link,useNavigate } from "react-router-dom";
+
 const LoginPage = () => {
+  const navigate=useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [formData, setFormData] = useState({
@@ -36,7 +37,8 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    fetch(`${urls.URI}/login`, {
+    // fetch(`${urls.URI}/login`, {
+    fetch(`http://localhost:8080/api/v1/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -45,9 +47,16 @@ const LoginPage = () => {
     })
     .then(response => response.json())
     .then(data => {
-     
-      console.log(data);
-    })
+     console.log(data)
+     const expiryDate = new Date();
+  expiryDate.setDate(expiryDate.getDate() + 5);
+
+  
+  localStorage.setItem('jwtToken', data.jwtToken);
+  localStorage.setItem('expiryDate', expiryDate.toISOString());
+      console.log("Data set succesfully")
+navigate('/dashboard')
+         })
     .catch(error => {
       
       console.error('Error:', error);
