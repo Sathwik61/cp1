@@ -5,10 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [msg,setMsg]=useState("");
   const expiryDate = localStorage.getItem("expiryDate");
 
   if (!expiryDate || new Date(expiryDate) <= new Date()) {
-    // no navigation..
+   
   } else {
     navigate("/home");
   }
@@ -43,7 +44,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // fetch(`${urls.URI}/login`, {
+  
     fetch(`http://localhost:8080/api/v1/login`, {
       method: "POST",
       headers: {
@@ -53,19 +54,28 @@ const LoginPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 5);
-
+        if(data.state){
         localStorage.setItem("jwtToken", data.jwtToken);
         localStorage.setItem("expiryDate", expiryDate.toISOString());
         if (localStorage.getItem("expiryDate")) {
           navigate("/home");
         }
+      }
+     
+        else{
+        setMsg(data.message)
+        // console.log(data.message)
+        setTimeout(() => {
+          setMsg("");
+        }, 3000);
+      }
       })
       .catch((error) => {
         console.error("Error:", error);
-        //   console.log(`${urls.URI}/login`)
+       
       });
   };
 
@@ -121,7 +131,7 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
-
+          
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm my-6">
               <Link
@@ -131,14 +141,15 @@ const LoginPage = () => {
                 New User?
               </Link>
             </div>
-            <div className="text-sm my-6">
-              <a
-                href="#"
+           
+            {/* <div className="text-sm my-6">
+              <Link
+                to="/forgot"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Forgot your password?
-              </a>
-            </div>
+              </Link>
+            </div> */}
           </div>
         </div>
       </div>

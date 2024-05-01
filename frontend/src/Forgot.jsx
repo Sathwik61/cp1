@@ -3,20 +3,22 @@ import s1 from "./assets/react.svg";
 import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 
-const SignupPage = () => {
-  const [msg,setMsg]=useState("");
+const Forgot = () => {
   const navigate = useNavigate();
+  const [msg,setMsg]=useState("");
   const expiryDate = localStorage.getItem("expiryDate");
-  if (expiryDate && new Date(expiryDate) > new Date()) {
+
+  if (!expiryDate || new Date(expiryDate) <= new Date()) {
+   
+  } else {
     navigate("/home");
   }
   const [typedText, setTypedText] = useState("");
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
     password: "",
   });
-  const fullText = "Sign up for an account";
+  const fullText = "Enter your email!";
 
   useEffect(() => {
     const typingAnimation = setInterval(() => {
@@ -41,9 +43,9 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   
-    // console.log(formData);
-    fetch("http://localhost:8080/api/v1/register", {
+    const randomNumber = Math.floor(100000 + Math.random() * 900000);
+    console.log(randomNumber)
+   /* fetch(`http://localhost:8080/api/v1/forgot`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,22 +54,13 @@ const SignupPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+          console.log();
       
-        if(data.state){
-          navigate("/");
-        }
-        if(data.state==false){
-          setMsg(data.message)
-        
-        setTimeout(() => {
-          setMsg("");
-        }, 3000);
-        }
-            })
+      })
       .catch((error) => {
-       
         console.error("Error:", error);
-      });
+       
+      });*/
   };
 
   return (
@@ -81,22 +74,6 @@ const SignupPage = () => {
             {typedText}
           </h2>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="fullName" className="sr-only">
-                Name
-              </label>
-              <input
-                id="name"
-                name="fullName"
-                type="text"
-                autoComplete="fullName"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
-                placeholder="fullName"
-              />
-            </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -113,7 +90,7 @@ const SignupPage = () => {
                 placeholder="Email address"
               />
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
@@ -121,36 +98,42 @@ const SignupPage = () => {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 value={formData.password}
                 onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-all"
                 placeholder="Password"
               />
-            </div>
+            </div> */}
             <div>
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:bg-gradient-to-r hover:from-indigo-700 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
               >
-                Sign up
+                Submit
               </button>
             </div>
-            <div className="flex justify-center my-7">
-              {msg && <p className="text-red-600 font-semibold">{msg}</p>}
-          </div>
           </form>
-
+          
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm my-6">
               <Link
-                to="/"
+                to="/signup"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Already have an Account? | Login
+                 Back
               </Link>
             </div>
+           
+            {/* <div className="text-sm my-6">
+              <Link
+                to="/forgot"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Forgot your password?
+              </Link>
+            </div> */}
           </div>
         </div>
       </div>
@@ -158,4 +141,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default Forgot;
