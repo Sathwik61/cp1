@@ -7,7 +7,9 @@ const routes = express.Router();
 
 
 routes.post('/register', userRegisterValidate ,registerUser);
-// routes.post('/register', userRegisterValidate ,registerUser);
+routes.get('/hello', (req,res)=>{
+    res.send({message:"Hello there"})
+});
 
 routes.post('/login', userLoginValidate, loginUser);
 
