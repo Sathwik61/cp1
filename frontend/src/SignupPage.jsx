@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import s1 from "./assets/react.svg";
 import "./login.css";
+import { GoogleOAuthProvider,GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
@@ -55,7 +57,7 @@ const SignupPage = () => {
       
         if(data.state){
           navigate("/");
-        }
+        } 
         if(data.state==false){
           setMsg(data.message)
         
@@ -68,7 +70,44 @@ const SignupPage = () => {
        
         console.error("Error:", error);
       });
-  };
+
+
+      
+    };
+    // google auth;
+    const authgoogle=async (parobj)=>{
+      fetch("http://localhost:8080/api/v1/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(parobj),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 5);
+      if(data.state){
+      localStorage.setItem("jwtToken", data.jwtToken);
+      localStorage.setItem("expiryDate", expiryDate.toISOString());
+      if (localStorage.getItem("expiryDate")) {
+        navigate("/home");
+      }
+      }
+     
+      if(data.state==false){
+        setMsg(data.message)
+      
+      setTimeout(() => {
+        setMsg("");
+      }, 3000);
+      }
+          })
+    .catch((error) => {
+     
+      console.error("Error:", error);
+    });
+    }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8">
@@ -136,6 +175,36 @@ const SignupPage = () => {
               >
                 Sign up
               </button>
+              <div className="my-3 flex justify-center">
+              <GoogleOAuthProvider clientId="1001842428391-mqsjkn629ce6hohe81ulluvltg36ckhh.apps.googleusercontent.com">
+
+              <GoogleLogin
+                onSuccess={(credentialResponse)=> {
+                  const decoded = jwtDecode(credentialResponse.credential);
+                  const password = Math.floor(10000 + Math.random() * 90000).toString().substring(0, 5);
+// console.log(password);
+                  const parobj={
+                    email:decoded.email,
+                    email_verified:decoded.email_verified,
+                    fullName:decoded.given_name,
+                    password:password
+                  }
+                  // console.log(decoded);
+                  // console.log(decoded.email ,decoded.email_verified);
+                  // console.log(parobj);
+                  authgoogle(parobj);
+          
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                  setMsg("Something Went Wrong!");
+                  setTimeout(() => {
+                    setMsg("");
+                  }, 3000);
+                }}
+              />
+              </GoogleOAuthProvider>
+              </div>
             </div>
             <div className="flex justify-center my-7">
               {msg && <p className="text-red-600 font-semibold">{msg}</p>}
