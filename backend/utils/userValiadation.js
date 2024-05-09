@@ -2,6 +2,11 @@
 const Joi = require('joi');
 
 const userRegisterValidate = (req, res, next)=>{
+    const email_verified=req.body.email_verified;
+    if(email_verified){
+        console.log(email_verified,"email verified")
+        return next();
+    }
     const schema = Joi.object({
         fullName: Joi.string().min(3).max(100).required(),
         email: Joi.string().email().required(),
@@ -15,6 +20,12 @@ const userRegisterValidate = (req, res, next)=>{
 }
 
 const userLoginValidate = (req,res,next)=>{
+    const email_verified=req.body.email_verified;
+    if(email_verified){
+        // console.log(email_verified,"email verified")
+        
+        return next();
+    }
     const schema = Joi.object({
         email: Joi.string().email().required(),
         password: Joi.string().min(4).alphanum().required()
