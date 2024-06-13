@@ -62,8 +62,8 @@ const Chatbot = () => {
             className="rounded-full h-8 w-8 mr-2"
           />
           <div>
-            <span className="text-white font-bold text-sm">ChatBot</span>
-            <p className="text-xs text-white">Welcome to our ChatBot</p>
+            <span className="text-white font-bold text-sm">File sahring</span>
+            <p className="text-xs text-white">Welcome to our File sharing4</p>
           </div>
         </div>
         <button
@@ -104,7 +104,7 @@ const Chatbot = () => {
         <div ref={messagesEndRef} />
       </div>
       {/* Input */}
-      <div className="p-4 bg-white shadow-lg">
+      {/* <div className="p-4 bg-white shadow-lg">
         <form onSubmit={handleMessageSubmit} className="flex items-center">
           <input
             type="text"
@@ -120,7 +120,10 @@ const Chatbot = () => {
             Send
           </button>
         </form>
-      </div>
+      </div> */}
+
+
+      
     </div>
   );
 };
