@@ -12,8 +12,18 @@ require('./config/db');
 const PORT = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
-app.use(cors())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cors(
+    {
+        origin: '*',
+    }
+))
 app.use('/api/v1', routes);
+app.get('/gh',(req,res)=>{
+    res.send("dfjgdgf")
+})
 app.use(cookieParser());
 
 app.listen(PORT, ()=>{

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { uploadFile } from './service/api';
 
 const Chatbot = () => {
   const navigate = useNavigate();
@@ -52,6 +53,43 @@ const Chatbot = () => {
     window.location.href = "/";
   };
 
+  // file sharing
+  const [file, setFile] = useState('');
+  const [result, setResult] = useState('');
+
+  const fileInputRef = useRef();
+
+  const url = 'https://i.pinimg.com/originals/16/46/24/1646243661201a0892cc4b1a64fcbacf.jpg';
+
+  useEffect(() => {
+    const getImage = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+
+        const response = await uploadFile(data);
+        setResult(response.path);
+      }
+    }
+    getImage();
+  }, [file])
+
+  const onUploadClick = () => {
+    fileInputRef.current.click();
+  }
+
+
+  const copyToClipboard = () => {
+    if (result) {
+      navigator.clipboard.writeText(result).then(() => {
+        alert('Link copied to clipboard!');
+      }).catch((err) => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       <div className="h-20 bg-gradient-to-r from-indigo-400 to-blue-600 flex items-center justify-between px-4">
@@ -63,7 +101,7 @@ const Chatbot = () => {
           />
           <div>
             <span className="text-white font-bold text-sm">File sahring</span>
-            <p className="text-xs text-white">Welcome to our File sharing4</p>
+            <p className="text-xs text-white">Welcome to our File sharing</p>
           </div>
         </div>
         <button
@@ -73,8 +111,8 @@ const Chatbot = () => {
           Logout
         </button>
       </div>
-      <div className="flex-grow overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-        {/* Messages */}
+      {/* <div className="flex-grow overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+       
         {messages.map((message, index) => (
           <div
             key={index}
@@ -102,9 +140,9 @@ const Chatbot = () => {
           </div>
         ))}
         <div ref={messagesEndRef} />
-      </div>
+      </div> */}
       {/* Input */}
-      {/* <div className="p-4 bg-white shadow-lg">
+     {/* <div className="p-4 bg-white shadow-lg">
         <form onSubmit={handleMessageSubmit} className="flex items-center">
           <input
             type="text"
@@ -120,11 +158,43 @@ const Chatbot = () => {
             Send
           </button>
         </form>
-      </div> */}
+      </div>  */}
 
-
-      
+<div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+        {url && <img src={url} className="w-full h-48 object-cover rounded" alt="uploaded file" />}
+        <div className="text-center mt-4">
+          <h1 className="text-2xl font-bold text-gray-800">Simple file sharing!</h1>
+          <p className="text-gray-600 mt-2">Upload and share the download link.</p>
+          <button
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={onUploadClick}
+          >
+            Upload
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          {result && (
+            <>
+            <a href={result} target="_blank" rel="noopener noreferrer" className="block mt-4 text-blue-500">
+              {result}
+            </a>
+            <button
+            className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            onClick={copyToClipboard}
+          >
+            Copy
+          </button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
+  </div>
   );
 };
 

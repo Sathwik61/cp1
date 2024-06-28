@@ -14,6 +14,13 @@ routes.post('/login', userLoginValidate, loginUser);
 
 routes.get('/users', ensureAuthenticated, getUsers);
 
+const upload =require('../utils/upload.js');
+const { uploadImage, getImage } =require('../userController/image-controller.js');
+
+
+routes.post('/upload', upload.single('file'), uploadImage);
+routes.get('/file/:fileId', getImage);
+
 
   
 
