@@ -91,110 +91,61 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      <div className="h-20 bg-gradient-to-r from-indigo-400 to-blue-600 flex items-center justify-between px-4">
+    <div className="h-screen flex flex-col bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900">
+      <div className="h-20 bg-gradient-to-r from-blue-800 to-purple-700 flex items-center justify-between px-4 shadow-lg">
         <div className="flex items-center">
           <img
             src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png"
             alt="Chatbot"
-            className="rounded-full h-8 w-8 mr-2"
+            className="rounded-full h-8 w-8 mr-2 border border-blue-300"
           />
           <div>
-            <span className="text-white font-bold text-sm">File sahring</span>
-            <p className="text-xs text-white">Welcome to our File sharing</p>
+            <span className="text-white font-bold text-sm">File Sharing</span>
+            <p className="text-xs text-white">Welcome to our File Sharing</p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="text-white text-xs font-medium border border-white rounded-full px-4 py-1 hover:bg-white hover:text-blue-600 focus:outline-none transition duration-300"
+          className="text-white text-xs font-medium border border-white rounded-full px-4 py-1 hover:bg-white hover:text-blue-800 focus:outline-none transition duration-300"
         >
           Logout
         </button>
       </div>
-      {/* <div className="flex-grow overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-       
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex justify-${
-              message.sender === "user" ? "end" : "start"
-            } mb-4`}
-          >
-            <div
-              className={`rounded-lg py-2 px-4 ${
-                message.sender === "user"
-                  ? "bg-blue-500 text-white ml-auto"
-                  : "bg-gray-200 text-gray-800 mr-auto"
-              } ${message.sender === "user" ? "mr-2" : "ml-2"}`}
-            >
-              {message.text}
-              <span
-                className={`text-xs ml-2 ${
-                  message.sender === "user" ? "text-white" : "text-gray-500"
-                }`}
-                style={{ fontSize: "0.75rem" }}
-              >
-                {message.time}
-              </span>
-            </div>
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div> */}
-      {/* Input */}
-     {/* <div className="p-4 bg-white shadow-lg">
-        <form onSubmit={handleMessageSubmit} className="flex items-center">
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            className="flex-1 text-gray-800 bg-gray-100 px-4 py-2 rounded-l-lg focus:outline-none"
-            placeholder="Type your message..."
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-r-lg transition duration-300"
-          >
-            Send
-          </button>
-        </form>
-      </div>  */}
-
-<div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        {url && <img src={url} className="w-full h-48 object-cover rounded" alt="uploaded file" />}
-        <div className="text-center mt-4">
-          <h1 className="text-2xl font-bold text-gray-800">Simple file sharing!</h1>
-          <p className="text-gray-600 mt-2">Upload and share the download link.</p>
-          <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={onUploadClick}
-          >
-            Upload
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          {result && (
-            <>
-            <a href={result} target="_blank" rel="noopener noreferrer" className="block mt-4 text-blue-500">
-              {result}
-            </a>
+      <div className="flex items-center justify-center flex-grow">
+        <div className="max-w-md w-full bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg shadow-lg rounded-lg p-6 border border-blue-300">
+          {url && <img src={url} className="w-full h-48 object-cover rounded-lg shadow-lg" alt="uploaded file" />}
+          <div className="text-center mt-4">
+            <h1 className="text-2xl font-bold text-white">Simple File Sharing!</h1>
+            <p className="text-white mt-2">Upload and share the download link.</p>
             <button
-            className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            onClick={copyToClipboard}
-          >
-            Copy
-          </button>
-            </>
-          )}
+              className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full hover:from-blue-600 hover:to-purple-600 transition duration-300 shadow-lg"
+              onClick={onUploadClick}
+            >
+              Upload
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            {result && (
+              <>
+                <a href={result} target="_blank" rel="noopener noreferrer" className="block mt-4 text-blue-200 hover:text-blue-300 transition duration-300">
+                  {result}
+                </a>
+                <button
+                  className="mt-2 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full hover:from-green-600 hover:to-teal-600 transition duration-300 shadow-lg"
+                  onClick={copyToClipboard}
+                >
+                  Copy
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
