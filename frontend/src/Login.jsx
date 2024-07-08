@@ -61,6 +61,8 @@ const LoginPage = () => {
         if (data.state) {
           localStorage.setItem("jwtToken", data.jwtToken);
           localStorage.setItem("expiryDate", expiryDate.toISOString());
+          localStorage.setItem("uid",data.tokenObject._id)
+          console.log(data.tokenObject._id);
           if (localStorage.getItem("expiryDate")) {
             navigate("/home");
           }
@@ -91,6 +93,7 @@ const LoginPage = () => {
         if (data.state) {
           localStorage.setItem("jwtToken", data.jwtToken);
           localStorage.setItem("expiryDate", expiryDate.toISOString());
+          localStorage.setItem("uid", data.tokenObject._id);
           if (localStorage.getItem("expiryDate")) {
             navigate("/home");
           }
@@ -158,7 +161,7 @@ const LoginPage = () => {
               </button>
             </div>
             <div className="my-3 flex justify-center">
-              <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+              <GoogleOAuthProvider clientId="1001842428391-mqsjkn629ce6hohe81ulluvltg36ckhh.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
                     const decoded = jwtDecode(credentialResponse.credential);

@@ -9,11 +9,14 @@ const uploadImage = async (request, response) => {
     const fileObj = {
         path: request.file.path,
         name: request.file.originalname,
+        user:request.body.uid
     };
-
+    // console.log(request.body.uid)
     try {
+        // console.log(fileObj)
         const file = await File.create(fileObj);
-        console.log(file);
+        // console.log(file);
+
         response.status(200).json({ path: `http://localhost:${process.env.PORT}/api/v1/file/${file._id}` });
     } catch (error) {
         console.error(error.message);

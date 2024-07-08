@@ -56,6 +56,11 @@ const SignupPage = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.state) {
+          const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 5);
+          localStorage.setItem("jwtToken", data.jwtToken);
+          localStorage.setItem("expiryDate", expiryDate.toISOString());
+          localStorage.setItem("uid", data.tokenObject._id);
           navigate("/");
         } else {
           setMsg(data.message);
@@ -84,6 +89,7 @@ const SignupPage = () => {
         if (data.state) {
           localStorage.setItem("jwtToken", data.jwtToken);
           localStorage.setItem("expiryDate", expiryDate.toISOString());
+          localStorage.setItem("uid", data.tokenObject._id);
           if (localStorage.getItem("expiryDate")) {
             navigate("/home");
           }
@@ -167,7 +173,7 @@ const SignupPage = () => {
               </button>
             </div>
             <div className="my-3 flex justify-center">
-              <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+              <GoogleOAuthProvider clientId="1001842428391-mqsjkn629ce6hohe81ulluvltg36ckhh.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
                     const decoded = jwtDecode(credentialResponse.credential);

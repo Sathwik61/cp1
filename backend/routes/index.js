@@ -2,6 +2,7 @@ const express = require('express');
 const { registerUser, loginUser, getUsers} = require('../userController');
 const { userRegisterValidate, userLoginValidate } = require('../utils/userValiadation');
 const { ensureAuthenticated } = require('../utils/auth');
+const {Links}=require('../utils/getlinks.js')
 const routes = express.Router();
 
 
@@ -20,6 +21,8 @@ const { uploadImage, getImage } =require('../userController/image-controller.js'
 
 routes.post('/upload', upload.single('file'), uploadImage);
 routes.get('/file/:fileId', getImage);
+
+routes.post('/getlinks',Links)
 
 
   
